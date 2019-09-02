@@ -33,8 +33,8 @@ post '/callback' do
         }
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Sticker
-        package_id = event.message.packageId
-        sticker_id = event.message.stickerId
+        # package_id = event.message.packageId
+        # sticker_id = event.message.stickerId
 
         message = {
           type: 'sticker',
