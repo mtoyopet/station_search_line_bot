@@ -46,7 +46,7 @@ post '/callback' do
       when Line::Bot::Event::MessageType::Location
         message = {
           type: 'text',
-          text: event.message.address
+          text: event.message['address']
           }
 
         client.reply_message(event['replyToken'], message)
