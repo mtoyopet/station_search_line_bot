@@ -45,16 +45,16 @@ post '/callback' do
 
     when Line::Bot::Event::Message
       case event.type
-      when Line::Bot::Event::MessageType::Text && event.message['text'] =~ /駅/
-
-        client.reply_message(event['replyToken'], template)
-
       when Line::Bot::Event::MessageType::Text
-        message = {
-          type: 'text',
-          text: event.message['text']
-        }
-        client.reply_message(event['replyToken'], message)
+        if event.message['text'] =~ /駅/
+         client.reply_message(event['replyToken'], template)
+        elsif
+          message = {
+            type: 'text',
+            text: event.message['text']
+          }
+          client.reply_message(event['replyToken'], message)
+        end
       when Line::Bot::Event::MessageType::Sticker
         package_id = event.message['packageId']
         sticker_id = event.message['stickerId']
