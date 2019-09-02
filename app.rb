@@ -2,6 +2,10 @@ require 'sinatra'
 require 'line/bot'
 require 'dotenv'
 
+get '/' do
+  "HELLO MOMOKO!!!"
+end
+
 def client
   @client ||= Line::Bot::Client.new { |config|
     config.channel_id = ENV["LINE_CHANNEL_ID"]
