@@ -38,9 +38,15 @@ post '/callback' do
 
         message = {
           type: 'sticker',
-          # text: event.message
           packageId: "11537",
           stickerId: "52002734"
+          }
+
+        client.reply_message(event['replyToken'], message)
+      when Line::Bot::Event::MessageType::Location
+        message = {
+          type: 'text',
+          text: event.message.address
           }
 
         client.reply_message(event['replyToken'], message)
