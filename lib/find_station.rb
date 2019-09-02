@@ -24,5 +24,3 @@ def station_api(longitude, latitude)
     return "#{line}　#{name}駅 (#{distance}メートル)"
   end
 end
-
-station_api("134.997633", "35.002069")
