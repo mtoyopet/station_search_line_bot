@@ -34,8 +34,8 @@ post '/callback' do
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Sticker
         message = {
-          type: 'text',
-          text: 'こら！！！！！'
+          type: 'sticker',
+          text: event.message['sticker']
         }
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
