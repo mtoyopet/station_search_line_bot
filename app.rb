@@ -32,6 +32,12 @@ post '/callback' do
           text: event.message['text']
         }
         client.reply_message(event['replyToken'], message)
+      when Line::Bot::Event::MessageType::Sticker
+        message = {
+          type: 'text',
+          text: 'こら！！！！！'
+        }
+        client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
         response = client.get_message_content(event.message['id'])
         tf = Tempfile.open("content")
