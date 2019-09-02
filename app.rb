@@ -2,20 +2,20 @@ require 'sinatra'
 require 'line/bot'
 require 'net/http'
 require 'json'
+require './lib/find_station'
 
-def station_api(longitude, latitude)
+def station_api(postal)
   uri = URI.parse 'http://geoapi.heartrails.com/api/json?method=getStations'
 
-  # リクエストの送信
   uri.query = URI.encode_www_form({
-    q: "get_nearest_station",
-    x: longitude,
-    y: latitude
+    method: "getStations",
+    postal: URI::encode(postal)
     })
   res = Net::HTTP.get_response(uri)
-  JSON.parse(res.body)["response"]["station"]
-end
+  station = JSON.parse(res.body)["response"]["station"]
 
+  return JSON.parse(res.body)["response"]["station"][0]["name"]
+end
 
 def client
   @client ||= Line::Bot::Client.new { |config|
@@ -57,7 +57,9 @@ post '/callback' do
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Location
 
-        result = station_api(event.message['longitude'], event.message['latitude'])
+        postal = event.message['address'].split(" ").split("〒")[1].split("-").join
+
+        result = station_api(postal)
 
         message = {
           type: 'text',
