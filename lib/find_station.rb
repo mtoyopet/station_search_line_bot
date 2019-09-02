@@ -13,14 +13,9 @@ def station_api(longitude, latitude)
     })
 
   res = Net::HTTP.get_response(uri)
+  stations = JSON.parse(res.body)["response"]["station"]
 
-  if JSON.parse(res.body)["response"]["station"].count > 1
-    station = JSON.parse(res.body)["response"]["station"][0]
+  result = stations.map { |station| "#{station['line']} #{station['name'}駅 (#{station['distance']}メートル)"}.join("\n")
 
-    name = station['name']
-    line = station['line']
-    distance = station['distance']
-
-    return "#{line}　#{name}駅 (#{distance}メートル)"
-  end
+  return result
 end

@@ -3,25 +3,8 @@ require 'line/bot'
 require 'net/http'
 require 'json'
 require './lib/find_station'
+require './lib/template'
 
-def template
-  {
-    "type": "template",
-    "altText": "位置検索中",
-    "template": {
-        "type": "buttons",
-        "title": "最寄駅探索探索",
-        "text": "現在の位置を送信しますか？",
-        "actions": [
-            {
-              "type": "uri",
-              "label": "位置を送る",
-              "uri": "line://nv/location"
-            }
-        ]
-    }
-  }
-end
 
 def client
   @client ||= Line::Bot::Client.new { |config|
