@@ -2,7 +2,7 @@ require 'sinatra'
 require 'line/bot'
 require 'dotenv'
 
-get '/' do
+get '/home' do
   "HELLO MOMOKO!!!"
 end
 
