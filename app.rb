@@ -35,7 +35,7 @@ post '/callback' do
       when Line::Bot::Event::MessageType::Sticker
         message = {
           type: 'sticker',
-          text: event.message['sticker']
+          sticker: event.message['sticker']
         }
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
