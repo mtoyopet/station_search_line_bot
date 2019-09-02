@@ -4,17 +4,37 @@ require 'net/http'
 require 'json'
 require './lib/find_station'
 
-def station_api(postal)
-  uri = URI.parse 'http://geoapi.heartrails.com/api/json?method=getStations'
+def station_api(longitude, latitude)
+  uri = URI.parse 'http://express.heartrails.com/api/json?method=getStations'
 
+  # リクエストの送信
   uri.query = URI.encode_www_form({
     method: "getStations",
-    postal: URI::encode(postal)
+    x: longitude,
+    y: latitude
     })
-  res = Net::HTTP.get_response(uri)
-  station = JSON.parse(res.body)["response"]["station"]
 
-  return JSON.parse(res.body)["response"]["station"][0]["name"]
+  res = Net::HTTP.get_response(uri)
+
+  if JSON.parse(res.body)["response"]["station"].count > 1
+    station = JSON.parse(res.body)["response"]["station"][0]
+
+    name = station['name']
+    line = station['line']
+    distance = station['distance']
+
+    return "#{line}　#{name}駅 (#{distance}メートル)"
+  end
+
+  # # puts "#{stations.count}駅見つかりました！"
+  #
+  # stations.each do |station|
+  #   name = station['name']
+  #   line = station['line']
+  #   distance = station['distance']
+  #
+  #   puts "#{line}　#{name}駅 (#{distance}メートル)"
+  # end
 end
 
 def client
@@ -57,9 +77,10 @@ post '/callback' do
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Location
 
-        postal = event.message['address'].split(" ")[0].split("〒")[1].split("-").join
+        longitude = event.message['longitude']
+        latitude = event.message['latitude']
 
-        result = station_api(postal)
+        result = station_api(longitude, latitude)
 
         message = {
           type: 'text',
