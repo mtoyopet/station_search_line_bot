@@ -57,7 +57,7 @@ post '/callback' do
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Location
 
-        postal = event.message['address'].split(" ").split("〒")[1].split("-").join
+        postal = event.message['address'].split(" ")[0].split("〒")[1].split("-").join
 
         result = station_api(postal)
 
