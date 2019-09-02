@@ -38,8 +38,8 @@ post '/callback' do
 
         message = {
           type: 'sticker',
-          packageId: package_id,
-          stickerId: sticker_id
+          packageId: "11537",
+          stickerId: "52002734"
           }
 
         client.reply_message(event['replyToken'], message)
