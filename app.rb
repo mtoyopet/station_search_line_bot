@@ -35,6 +35,9 @@ post '/callback' do
       when Line::Bot::Event::MessageType::Sticker
         # package_id = event.message.packageId
         # sticker_id = event.message.stickerId
+        puts "===================="
+        puts event.message
+        puts "===================="
 
         message = {
           type: 'sticker',
