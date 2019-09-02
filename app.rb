@@ -1,6 +1,9 @@
 require 'sinatra'
 require 'line/bot'
-require 'dotenv' if development?
+
+get '/' do
+ "on my way to Tokyo"
+end
 
 def client
   @client ||= Line::Bot::Client.new { |config|
