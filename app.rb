@@ -37,10 +37,10 @@ post '/callback' do
         # sticker_id = event.message.stickerId
 
         message = {
-          type: 'text',
-          text: event.message
-          # packageId: "11537",
-          # stickerId: "52002734"
+          type: 'sticker',
+          # text: event.message
+          packageId: "11537",
+          stickerId: "52002734"
           }
 
         client.reply_message(event['replyToken'], message)
