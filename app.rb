@@ -2,11 +2,11 @@ require 'sinatra'
 require 'line/bot'
 require 'net/http'
 require 'json'
-require './lib/find_station'
+require './lib/heartrails'
 require './lib/template'
 
 def client
-  @client ||= Line::Bot::Client.new { |config|
+  @client ||= Line::Bot::Client.new {|config|
     config.channel_id = ENV["LINE_CHANNEL_ID"]
     config.channel_secret = ENV["LINE_CHANNEL_SECRET"]
     config.channel_token = ENV["LINE_CHANNEL_TOKEN"]
@@ -18,23 +18,23 @@ post '/callback' do
 
   signature = request.env['HTTP_X_LINE_SIGNATURE']
   unless client.validate_signature(body, signature)
-    error 400 do 'Bad Request' end
+    error 400 do
+      'Bad Request'
+    end
   end
 
   events = client.parse_events_from(body)
   events.each do |event|
     case event
-
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
         if event.message['text'] =~ /駅/
-         client.reply_message(event['replyToken'], template)
-        elsif
-          message = {
+          client.reply_message(event['replyToken'], template)
+        elsif message = {
             type: 'text',
             text: event.message['text']
-          }
+        }
           client.reply_message(event['replyToken'], message)
         end
       when Line::Bot::Event::MessageType::Sticker
@@ -42,23 +42,25 @@ post '/callback' do
         sticker_id = event.message['stickerId']
 
         message = {
-          type: 'sticker',
-          packageId: package_id,
-          stickerId: sticker_id
-          }
+            type: 'sticker',
+            packageId: package_id,
+            stickerId: sticker_id
+        }
 
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Location
+        # event から 緯度経度のデータを取り出し
+        longitude = event.message['longitude'] # 経度
+        latitude = event.message['latitude'] # 緯度
 
-        longitude = event.message['longitude']
-        latitude = event.message['latitude']
-
-        result = station_api(longitude, latitude)
+        # 駅検索API呼び出し
+        heartrails = Heartrails.new
+        stations = heartrails.get_stations(longitude, latitude)
 
         message = {
-          type: 'text',
-          text: result
-          }
+            type: 'text',
+            text: stations.map { |station| station_str(station) }.join("\n")
+        }
 
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
@@ -71,4 +73,8 @@ post '/callback' do
 
   # Don't forget to return a successful response
   "OK"
+end
+
+def station_str(station)
+  "#{station['line']} #{station['name']}駅 (#{station['distance']}メートル)"
 end
