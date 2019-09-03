@@ -1,11 +1,6 @@
-require 'net/http'
-require 'json'
-require 'uri'
-
 def station_api(longitude, latitude)
   uri = URI.parse 'http://express.heartrails.com/api/json?method=getStations'
 
-  # リクエストの送信
   uri.query = URI.encode_www_form({
     method: "getStations",
     x: longitude,

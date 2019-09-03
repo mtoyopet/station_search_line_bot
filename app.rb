@@ -5,7 +5,6 @@ require 'json'
 require './lib/find_station'
 require './lib/template'
 
-
 def client
   @client ||= Line::Bot::Client.new { |config|
     config.channel_id = ENV["LINE_CHANNEL_ID"]
