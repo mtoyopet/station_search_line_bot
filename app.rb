@@ -57,9 +57,9 @@ post '/callback' do
         heartrails = Heartrails.new
         stations = heartrails.get_stations(longitude, latitude)
 
-        google_text = get_direction(event.message['longitude'], event.message['latitude'], station[0]['name'])
+        google_text = get_direction(event.message['longitude'], event.message['latitude'], stations[0]['name'])
 
-        station_text = "#{station[0]['line']} #{station[0]['name']}駅 (#{station[0]['distance']}メートル) GoogleMapはこちら-> #{google_text}"
+        station_text = "#{stations[0]['line']} #{stations[0]['name']}駅 (#{stations[0]['distance']}メートル) GoogleMapはこちら-> #{google_text}"
 
         message = {
             type: 'text',
