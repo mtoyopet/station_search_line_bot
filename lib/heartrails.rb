@@ -16,4 +16,14 @@ class Heartrails
     res = Net::HTTP.get_response(uri)
     JSON.parse(res.body)['response']['station']
   end
+
+  def get_lines(prefecture)
+    uri = URI.parse("#{@@uri_base}")
+    uri.query = URI.encode_www_form(
+      method: 'getLines',
+      prefecture: prefecture
+    )
+    res = Net::HTTP.get_response(uri)
+    JSON.parse(res.body)['response']['line']
+  end
 end

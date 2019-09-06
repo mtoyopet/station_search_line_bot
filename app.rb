@@ -30,7 +30,7 @@ post '/callback' do
       case event.type
       when Line::Bot::Event::MessageType::Text
         if event.message['text'] =~ /駅/
-          client.reply_message(event['replyToken'], template)
+          client.reply_message(event['replyToken'], current_location_template)
         elsif message = {
             type: 'text',
             text: event.message['text']
@@ -57,9 +57,14 @@ post '/callback' do
         heartrails = Heartrails.new
         stations = heartrails.get_stations(longitude, latitude)
 
+        google_text = get_direction(event.message['longitude'], event.message['latitude'], station[0]['name'])
+
+        station_text = "#{station[0]['line']} #{station[0]['name']}駅 (#{station[0]['distance']}メートル) GoogleMapはこちら-> #{google_text}"
+
         message = {
             type: 'text',
-            text: stations.map { |station| station_str(station) }.join("\n")
+            # text: stations.map { |station| station_str(station) }.join("\n")
+            text: station_text
         }
 
         client.reply_message(event['replyToken'], message)
@@ -77,4 +82,8 @@ end
 
 def station_str(station)
   "#{station['line']} #{station['name']}駅 (#{station['distance']}メートル)"
+end
+
+def get_direction(longitude, latitude, destination)
+  "https://www.google.com/maps/dir/?api=1&origin=#{longitude},#{latitude}&destination=#{destination}"
 end
