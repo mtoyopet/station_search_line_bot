@@ -85,5 +85,5 @@ def station_str(station)
 end
 
 def get_direction(longitude, latitude, destination)
-  "GoogleMapはこちら\nhttps://www.google.com/maps/dir/?api=1&origin=#{longitude},#{latitude}&destination=#{destination}"
+  "GoogleMapはこちら\nhttps://www.google.com/maps/dir/?api=1&origin=#{longitude},#{latitude}&destination=#{destination}&mode=walking"
 end
