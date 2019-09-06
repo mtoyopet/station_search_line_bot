@@ -57,7 +57,7 @@ post '/callback' do
         heartrails = Heartrails.new
         stations = heartrails.get_stations(longitude,latitude)
 
-        text = staions[0..2].map do |station|
+        text = stations[0..2].map do |station|
           station_str(station) + get_direction(event.message['latitude'], event.message['longitude'], "#{station['name']}駅")
         end
 
