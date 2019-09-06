@@ -57,14 +57,14 @@ post '/callback' do
         heartrails = Heartrails.new
         stations = heartrails.get_stations(longitude,latitude)
 
-        google_text = get_direction(event.message['latitude'], event.message['longitude'], "#{stations[0]['name']}駅")
-
-        station_text = "#{stations[0]['line']} #{stations[0]['name']}駅 (#{stations[0]['distance']}メートル) GoogleMapはこちら-> #{google_text}"
+        text = staions[0..2].map do |station|
+          station_str(station) + get_direction(event.message['latitude'], event.message['longitude'], "#{station['name']}駅")
+        end
 
         message = {
             type: 'text',
             # text: stations.map { |station| station_str(station) }.join("\n")
-            text: station_text
+            text: text.join("\n")
         }
 
         client.reply_message(event['replyToken'], message)
@@ -81,9 +81,9 @@ post '/callback' do
 end
 
 def station_str(station)
-  "#{station['line']} #{station['name']}駅 (#{station['distance']}メートル)"
+  "#{station['line']} #{station['name']}駅 (#{station['distance']}メートル)\n"
 end
 
 def get_direction(longitude, latitude, destination)
-  "https://www.google.com/maps/dir/?api=1&origin=#{longitude},#{latitude}&destination=#{destination}"
+  "GoogleMapはこちら\nhttps://www.google.com/maps/dir/?api=1&origin=#{longitude},#{latitude}&destination=#{destination}"
 end
