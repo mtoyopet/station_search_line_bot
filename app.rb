@@ -55,7 +55,7 @@ post '/callback' do
 
         # 駅検索API呼び出し
         heartrails = Heartrails.new
-        stations = heartrails.get_stations(latitude,longitude)
+        stations = heartrails.get_stations(longitude,latitude)
 
         google_text = get_direction(event.message['latitude'], event.message['longitude'], "#{stations[0]['name']}駅")
 
