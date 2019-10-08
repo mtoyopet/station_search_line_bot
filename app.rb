@@ -63,7 +63,6 @@ post '/callback' do
 
         message = {
             type: 'text',
-            # text: stations.map { |station| station_str(station) }.join("\n")
             text: text.join("\n")
         }
 
