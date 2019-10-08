@@ -40,7 +40,7 @@ post '/callback' do
           text: event.message['text']
         }
 
-        client.reply_message(event['replyToken'], message)
+        client.reply_message(event['replyToken'], "やっほーー")
         # 駅検索アプリ
         # if event.message['text'] =~ /駅/
         #   client.reply_message(event['replyToken'], current_location_template)
