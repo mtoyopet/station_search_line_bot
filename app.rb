@@ -5,6 +5,10 @@ require 'json'
 require './lib/heartrails'
 require './lib/template'
 
+get '/' do
+  "HELLO WORLD!!!!!!\(^_^)/"
+end
+
 def client
   @client ||= Line::Bot::Client.new {|config|
     config.channel_id = ENV["LINE_CHANNEL_ID"]
