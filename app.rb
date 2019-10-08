@@ -6,6 +6,7 @@ require './lib/heartrails'
 require './lib/template'
 
 get '/' do
+  # ↓ 下記を何か他の文字に変えてみよう
   "HELLO WORLD!!!!!!"
 end
 
@@ -33,15 +34,24 @@ post '/callback' do
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
-        if event.message['text'] =~ /駅/
-          client.reply_message(event['replyToken'], current_location_template)
-        elsif message = {
-            type: 'text',
-            text: event.message['text']
+        # おうむ返しをする
+        message = {
+          type: 'text',
+          text: event.message['text']
         }
-          client.reply_message(event['replyToken'], message)
-        end
+
+        client.reply_message(event['replyToken'], message)
+        # 駅検索アプリ
+        # if event.message['text'] =~ /駅/
+        #   client.reply_message(event['replyToken'], current_location_template)
+        # elsif message = {
+        #     type: 'text',
+        #     text: event.message['text']
+        # }
+        #   client.reply_message(event['replyToken'], message)
+        # end
       when Line::Bot::Event::MessageType::Sticker
+        #スティッカーが送られてきたらスティッカーを返す
         package_id = event.message['packageId']
         sticker_id = event.message['stickerId']
 
