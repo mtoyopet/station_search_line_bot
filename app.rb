@@ -14,7 +14,7 @@ def client
   @client ||= Line::Bot::Client.new {|config|
     config.channel_id = ENV["LINE_CHANNEL_ID"]
     config.channel_secret = ENV["LINE_CHANNEL_SECRET"]
-    config.channel_token = ENV["LINE_CHANNEL_TOKEN"]
+    config.channel_token = ENV["LINE_CHANNEL_ACCESS_TOKEN"]
   }
 end
 
@@ -41,6 +41,7 @@ post '/callback' do
         }
 
         client.reply_message(event['replyToken'], "やっほーー")
+
         # 駅検索アプリ
         # if event.message['text'] =~ /駅/
         #   client.reply_message(event['replyToken'], current_location_template)
