@@ -6,7 +6,7 @@ require './lib/heartrails'
 require './lib/template'
 
 get '/' do
-  "HELLO WORLD!!!!!!\(^_^)/"
+  "HELLO WORLD!!!!!!"
 end
 
 def client
