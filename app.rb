@@ -5,11 +5,6 @@ require 'json'
 require './lib/heartrails'
 require './lib/template'
 
-get '/' do
-  # ↓ 下記を何か他の文字に変えてみよう
-  "HELLO WORLD!!!!!!"
-end
-
 def client
   @client ||= Line::Bot::Client.new {|config|
     config.channel_id = ENV["LINE_CHANNEL_ID"]
@@ -20,7 +15,7 @@ end
 
 post '/callback' do
   body = request.body.read
-  
+
   signature = request.env['HTTP_X_LINE_SIGNATURE']
   unless client.validate_signature(body, signature)
     error 400 do
@@ -34,25 +29,15 @@ post '/callback' do
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
-        # おうむ返しをする
-        message = {
-          type: 'text',
-          text: event.message['text']
+        if event.message['text'] =~ /駅/
+          client.reply_message(event['replyToken'], current_location_template)
+        elsif message = {
+            type: 'text',
+            text: event.message['text']
         }
-
-        client.reply_message(event['replyToken'], "やっほーー")
-
-        # 駅検索アプリ
-        # if event.message['text'] =~ /駅/
-        #   client.reply_message(event['replyToken'], current_location_template)
-        # elsif message = {
-        #     type: 'text',
-        #     text: event.message['text']
-        # }
-        #   client.reply_message(event['replyToken'], message)
-        # end
+          client.reply_message(event['replyToken'], message)
+        end
       when Line::Bot::Event::MessageType::Sticker
-        #スティッカーが送られてきたらスティッカーを返す
         package_id = event.message['packageId']
         sticker_id = event.message['stickerId']
 
@@ -78,10 +63,16 @@ post '/callback' do
 
         message = {
             type: 'text',
+            # text: stations.map { |station| station_str(station) }.join("\n")
             text: text.join("\n")
         }
 
         client.reply_message(event['replyToken'], message)
+      when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
+        response = client.get_message_content(event.message['id'])
+        tf = Tempfile.open("content")
+        tf.write(response.body)
+      end
     end
   end
 
