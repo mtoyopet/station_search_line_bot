@@ -20,10 +20,12 @@ end
 
 post '/callback' do
   body = request.body.read
+  p body
 
   signature = request.env['HTTP_X_LINE_SIGNATURE']
   unless client.validate_signature(body, signature)
     error 400 do
+      p 'Bad Request'
       'Bad Request'
     end
   end
@@ -39,6 +41,7 @@ post '/callback' do
           type: 'text',
           text: event.message['text']
         }
+        p message
 
         client.reply_message(event['replyToken'], "やっほーー")
 
@@ -82,11 +85,6 @@ post '/callback' do
         }
 
         client.reply_message(event['replyToken'], message)
-      when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
-        response = client.get_message_content(event.message['id'])
-        tf = Tempfile.open("content")
-        tf.write(response.body)
-      end
     end
   end
 
