@@ -38,7 +38,7 @@ post '/callback' do
         else
           message = {
             type: 'text',
-            text: event.text['message']
+            text: event.message['text']
           }
           client.reply_message(event['replyToken'], message)
 
