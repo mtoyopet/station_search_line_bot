@@ -30,12 +30,14 @@ post '/callback' do
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
+        #文字をおうむ返しする
         message = {
           type: 'text',
           text: event.message['text']
         }
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Sticker
+        #ステッカーをおうむ返しする
         package_id = event.message['packageId']
         sticker_id = event.message['stickerId']
 
