@@ -29,66 +29,24 @@ post '/callback' do
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
-        message = {
-          type: 'text',
-          text: event.message['text']
-        }
-        client.reply_message(event['replyToken'], message)
+        if event.message['text'] == "にゃん"
+          message = {
+            type: 'text',
+            text: "にゃん"
+          }
+          client.reply_message(event['replyToken'], message)
+        else
+          message = {
+            type: 'text',
+            text: event.text['message']
+          }
+          client.reply_message(event['replyToken'], message)
+
+        end
       end
     end
   end
 end
-          
-        # if event.message['text'] =~ /駅/
-        #   client.reply_message(event['replyToken'], current_location_template)
-        # elsif message = {
-        #     type: 'text',
-        #     text: event.message['text']
-        # }
-        #   client.reply_message(event['replyToken'], message)
-      # end
-      # when Line::Bot::Event::MessageType::Sticker
-      #   package_id = event.message['packageId']
-      #   sticker_id = event.message['stickerId']
-
-      #   message = {
-      #       type: 'sticker',
-      #       packageId: package_id,
-      #       stickerId: sticker_id
-      #   }
-
-      #   client.reply_message(event['replyToken'], message)
-      # when Line::Bot::Event::MessageType::Location
-      #   # event から 緯度経度のデータを取り出し
-      #   longitude = event.message['longitude'] # 経度
-      #   latitude = event.message['latitude'] # 緯度
-
-      #   # 駅検索API呼び出し
-      #   heartrails = Heartrails.new
-      #   stations = heartrails.get_stations(longitude,latitude)
-
-      #   text = stations[0..2].map do |station|
-      #     station_str(station) + get_direction(event.message['latitude'], event.message['longitude'], "#{station['name']}駅")
-      #   end
-
-      #   message = {
-      #       type: 'text',
-      #       # text: stations.map { |station| station_str(station) }.join("\n")
-      #       text: text.join("\n")
-      #   }
-
-      #   client.reply_message(event['replyToken'], message)
-      # when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
-      #   response = client.get_message_content(event.message['id'])
-      #   tf = Tempfile.open("content")
-      #   tf.write(response.body)
-      # end
-  #   end
-  # end
-
-  # Don't forget to return a successful response
-#   "OK"
-# end
 
 def station_str(station)
   "#{station['line']} #{station['name']}駅 (#{station['distance']}メートル)\n"
