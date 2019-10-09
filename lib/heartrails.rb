@@ -2,8 +2,6 @@ require 'net/http'
 require 'json'
 
 class Heartrails
-  # 緯度経度を使って別の検索もしたい場合はクラス内部の変数として保持しておくのもOK
-  # attr_accessor :longitude, :latitude
   @@uri_base = 'http://express.heartrails.com/api/json'
 
   def get_stations(longitude, latitude)
