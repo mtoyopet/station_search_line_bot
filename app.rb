@@ -85,12 +85,12 @@ end
 #         end
 #       when Line::Bot::Event::MessageType::Location
 #         # event から 緯度経度のデータを取り出し
-#         longitude = event.message['longitude'] # 経度
 #         latitude = event.message['latitude'] # 緯度
+#         longitude = event.message['longitude'] # 経度
 
 #         # 駅検索API呼び出し
 #         heartrails = Heartrails.new
-#         stations = heartrails.get_stations(longitude,latitude)
+#         stations = heartrails.get_stations(latitude, longitude)
 
 #         text = stations[0..2].map do |station|
 #           station_str(station) + get_direction(event.message['latitude'], event.message['longitude'], "#{station['name']}駅")
@@ -111,6 +111,6 @@ def station_str(station)
   "#{station['line']} #{station['name']}駅 (#{station['distance']}メートル)\n"
 end
 
-def get_direction(longitude, latitude, destination)
-  "GoogleMapはこちら\nhttps://www.google.com/maps/dir/?api=1&origin=#{longitude},#{latitude}&destination=#{destination}&mode=walking"
+def get_direction(latitude, longitude, destination)
+  "https://www.google.com/maps/dir/?api=1&origin=#{latitude},#{longitude}&destination=#{destination}"
 end
